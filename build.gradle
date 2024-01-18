@@ -17,3 +17,35 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+//Ещё один вариант но более сложный в чтении
+//def map = [description: "Hello task on closer", group: "dmdev"]
+//task(map, "hello") {
+//    println "configuration phase. Task hello"
+//    println "description: $description \ngroup: $group \nactions: ${actions.size()}"
+//}
+
+//                             HashMap<>
+task hello(description: "Hello task on closer", group: "dmdev", type: DefaultTask) {
+//3
+    println "configuration phase. Task hello"
+    println "description: $description \ngroup: $group \nactions: ${actions.size()}"
+}
+
+// Structure ->
+//task ("hello", { // Closer
+//    println "configuration phase. Task hello"
+//    description = "Hello task on closer"
+//    group = "dmdev"
+//})
+
+////1
+//hello.description = "Hello task"
+//hello.group = "dmdev"
+//
+////2
+//// hello.configure Closer
+//hello {
+//    println "configuration phase. Task hello"
+//    description = "Hello task on closer"
+//    group = "dmdev"
+//}
