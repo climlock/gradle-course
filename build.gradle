@@ -28,8 +28,71 @@ test {
 task hello(description: "Hello task on closer", group: "dmdev", type: DefaultTask) {
 //3
     println "configuration phase. Task hello"
+
+//    Actions
+
+    doLast {
+        println "execution phase, Action 1"
+    }
+    doFirst {
+        println "execution phase, Action 2"
+    }
     println "description: $description \ngroup: $group \nactions: ${actions.size()}"
 }
+
+task first {
+    doLast {
+        println "Task 1"
+    }
+}
+
+task second {
+    doLast {
+        println "Task 2"
+    }
+}
+
+task third {
+    doLast {
+        println "Task 3"
+    }
+}
+
+task fourth {
+    doLast {
+        println "Task 4"
+    }
+}
+
+// Зависимости
+//fourth.dependsOn(second)   // Task4 зависит от Task2
+//second.dependsOn(first)
+// Постепенное выполнение: 1) Task 1; 2) Task 2; 3) Task 4
+
+
+//second.finalizedBy third
+// Постепенное выполнение: 1) Task 1; 2) Task 2; 3) Task 3; 4) Task 4
+
+
+fourth.dependsOn second
+fourth.dependsOn first
+fourth.dependsOn third
+
+
+// Последовательность без зависимостей
+first.mustRunAfter second
+//second.shouldRunAfter first
+
+
+// Метод для просмотра графа тасков
+gradle.taskGraph.whenReady {TaskExecutionGraph graph ->
+    println "--- Graph:"
+    graph.allTasks.each {
+        println "${it.name}"
+    }
+}
+
+
 
 // Structure ->
 //task ("hello", { // Closer
