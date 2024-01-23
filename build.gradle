@@ -100,6 +100,7 @@ gradle.taskGraph.afterTask { Task task ->
     }
 }
 
+
 gradle.taskGraph.beforeTask { Task task ->
     if (task.name == "third") {
 
