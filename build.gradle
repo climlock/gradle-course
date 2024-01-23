@@ -58,7 +58,7 @@ task third {
     }
 }
 
-task fourth {
+task fourth(group: "dev") {
     doLast {
         println "Task 4"
     }
@@ -80,7 +80,7 @@ fourth.dependsOn third
 
 
 // Последовательность без зависимостей
-first.mustRunAfter second
+//first.mustRunAfter second
 //second.shouldRunAfter first
 
 
@@ -91,6 +91,25 @@ gradle.taskGraph.whenReady {TaskExecutionGraph graph ->
         println "${it.name}"
     }
 }
+
+
+// Действия которые выполняються после и перед каждым таском
+gradle.taskGraph.afterTask { Task task ->
+    if (task.group == "dev") {
+        println "afterTusk method: $task"
+    }
+}
+
+gradle.taskGraph.beforeTask { Task task ->
+    if (task.name == "third") {
+
+        println "beforeTuck method: $task"
+    }
+}
+
+// Вызывает таск 2 по умолчанию
+//Console: gradle
+defaultTasks("second")
 
 
 
