@@ -5,6 +5,33 @@ plugins {
 apply from: 'script.gradle'
 apply plugin: CustomPlugin
 
+repositories {
+    mavenCentral() 
+}
+
+dependencies {
+    // Способы подключить зависимости
+//    add('implementation', [group: "org.springframework", name: 'spring-webmvc', version: '6.0.9'])
+//    add('implementation', "org.springframework:spring-webmvc:6.0.9")
+    implementation "org.springframework:spring-webmvc:6.0.9"
+}
+
+sourceSets {
+
+    main {
+        java {
+            srcDir "$buildDir/generated-sources/querydsl"
+        }
+        resources {
+
+        }
+    }
+
+    test {
+
+    }
+}
+
 class CustomPlugin implements Plugin<Project> {
 
     @Override
