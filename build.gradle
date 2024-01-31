@@ -1,134 +1,21 @@
-plugins {
-    id 'java'
-}
+apply from: 'script.gradle'
+apply plugin: CustomPlugin
 
-group = 'org.example'
-version = '1.0-SNAPSHOT'
+class CustomPlugin implements Plugin<Project> {
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
-
-test {
-    useJUnitPlatform()
-}
-//Ещё один вариант но более сложный в чтении
-//def map = [description: "Hello task on closer", group: "dmdev"]
-//task(map, "hello") {
-//    println "configuration phase. Task hello"
-//    println "description: $description \ngroup: $group \nactions: ${actions.size()}"
-//}
-
-//                             HashMap<>
-task hello(description: "Hello task on closer", group: "dmdev", type: DefaultTask) {
-//3
-    println "configuration phase. Task hello"
-
-//    Actions
-
-    doLast {
-        println "execution phase, Action 1"
-    }
-    doFirst {
-        println "execution phase, Action 2"
-    }
-    println "description: $description \ngroup: $group \nactions: ${actions.size()}"
-}
-
-task first {
-    doLast {
-        println "Task 1"
+    @Override
+    void apply(Project project) {
+        def map = [description: "Hello task on closer", group: "dmdev", type: DefaultTask]
+        project.task(map, "hello") {
+            println "configuration phase. Task hello"
+            //    Actions
+            doLast {
+                println "execution phase, Action 1"
+            }
+            doFirst {
+                println "execution phase, Action 2"
+            }
+            println "description: $description \ngroup: $group \nactions: ${actions.size()}"
+        }
     }
 }
-
-task second {
-    doLast {
-        println "Task 2"
-    }
-}
-
-task third {
-    doLast {
-        println "Task 3"
-    }
-}
-
-task fourth(group: "dev") {
-    doLast {
-        println "Task 4"
-    }
-}
-
-// Зависимости
-//fourth.dependsOn(second)   // Task4 зависит от Task2
-//second.dependsOn(first)
-// Постепенное выполнение: 1) Task 1; 2) Task 2; 3) Task 4
-
-
-//second.finalizedBy third
-// Постепенное выполнение: 1) Task 1; 2) Task 2; 3) Task 3; 4) Task 4
-
-
-fourth.dependsOn second
-fourth.dependsOn first
-fourth.dependsOn third
-
-
-// Последовательность без зависимостей
-//first.mustRunAfter second
-//second.shouldRunAfter first
-
-
-// Метод для просмотра графа тасков
-gradle.taskGraph.whenReady {TaskExecutionGraph graph ->
-    println "--- Graph:"
-    graph.allTasks.each {
-        println "${it.name}"
-    }
-}
-
-
-// Действия которые выполняються после и перед каждым таском
-gradle.taskGraph.afterTask { Task task ->
-    if (task.group == "dev") {
-        println "afterTusk method: $task"
-    }
-}
-
-
-gradle.taskGraph.beforeTask { Task task ->
-    if (task.name == "third") {
-
-        println "beforeTuck method: $task"
-    }
-}
-
-// Вызывает таск 2 по умолчанию
-//Console: gradle
-defaultTasks("second")
-
-
-
-// Structure ->
-//task ("hello", { // Closer
-//    println "configuration phase. Task hello"
-//    description = "Hello task on closer"
-//    group = "dmdev"
-//})
-
-////1
-//hello.description = "Hello task"
-//hello.group = "dmdev"
-//
-////2
-//// hello.configure Closer
-//hello {
-//    println "configuration phase. Task hello"
-//    description = "Hello task on closer"
-//    group = "dmdev"
-//}
