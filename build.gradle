@@ -1,3 +1,7 @@
+plugins {
+    id 'java'
+}
+
 apply from: 'script.gradle'
 apply plugin: CustomPlugin
 
@@ -5,7 +9,7 @@ class CustomPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        def map = [description: "Hello task on closer", group: "dmdev", type: DefaultTask]
+        def map = [description: "Hello task on closer", group: "dev", type: DefaultTask]
         project.task(map, "hello") {
             println "configuration phase. Task hello"
             //    Actions
